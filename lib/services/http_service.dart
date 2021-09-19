@@ -5,9 +5,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:architecture_core/core/core.dart';
 
 class HttpService with Listfy {
-  final Dio client;
+  final Dio client = Dio();
 
-  HttpService(String route, this.client) {
+  HttpService(String route) {
 
     this.client.options = BaseOptions(
       baseUrl: "${AppSettings.apiPath}$route",
@@ -28,11 +28,21 @@ class HttpService with Listfy {
     return ServerFailure([FailuresMessages.SERVER_CONNECTION_FAILURE]);
   }
 
+  Future<Either<Failure, T>> findByQuery<T>(
+      {Map<String, dynamic>? query, required DTO<T> dto}) async {
+    try {
+      final response = await client.get("", queryParameters: query);
+      return Right(dto.toObject(response.data));
+    } catch (e) {
+      return Left(_errorHandler(e));
+    }
+  }
+
   Future<Either<Failure, T>> findById<T>(
-      {String path = "", required DTO dto}) async {
+      {String path = "", required DTO<T> dto}) async {
     try {
       final response = await client.get(path);
-      return Right(dto.toObject<T>(response.data));
+      return Right(dto.toObject(response.data));
     } catch (e) {
       return Left(_errorHandler(e));
     }
@@ -51,27 +61,30 @@ class HttpService with Listfy {
       {String path = "", Map<String, dynamic>? query, required DTO dto}) async {
     try {
       final response = await client.get(path, queryParameters: query);
-      return Right(dto.toObject<List<T>>(toList<T>(response.data)));
+      return Right(
+          toList<Map<String, dynamic>>(response.data)
+              .map<T>((Map<String, dynamic> data) => dto.toObject(data))
+              .toList());
     } catch (e) {
       return Left(_errorHandler(e));
     }
   }
 
-  Future<Either<Failure, L>> create<L, R>(R? data,
-      {String path = "", required DTO dto}) async {
+  Future<Either<Failure, T>> create<T>(Map<String, dynamic> data,
+      {String path = "", required DTO<T> dto}) async {
     try {
-      final response = await client.post(path, data: data != null ? dto.toMap<R>(data) : null);
-      return Right(dto.toObject<L>(response.data));
+      final response = await client.post(path, data: data);
+      return Right(dto.toObject(response.data));
     } catch (e) {
       return Left(_errorHandler(e));
     }
   }
 
-  Future<Either<Failure, L>> update<L, R>(R data,
-      {String path = "", required DTO dto}) async {
+  Future<Either<Failure, T>> update<T>(Map<String, dynamic> data,
+      {String path = "", required DTO<T> dto}) async {
     try {
-      final response = await client.patch(path, data: dto.toMap<R>(data));
-      return Right(dto.toObject<L>(response.data));
+      final response = await client.patch(path, data: data);
+      return Right(dto.toObject(response.data));
     } catch (e) {
       return Left(_errorHandler(e));
     }

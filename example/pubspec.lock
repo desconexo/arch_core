@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "1.0.3"
   dartz:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dartz
       url: "https://pub.dartlang.org"
@@ -72,7 +72,7 @@ packages:
     source: hosted
     version: "4.0.0"
   equatable:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: equatable
       url: "https://pub.dartlang.org"

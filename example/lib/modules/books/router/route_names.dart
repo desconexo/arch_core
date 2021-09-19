@@ -1,9 +1,10 @@
 class RouteBuilder {
-  static String books = RoutePaths.books;
-  static String search = "${RoutePaths.books}${RoutePaths.search}";
+  static String books() => RoutePaths.books;
+  static String search(String? bookId) =>
+      "${RoutePaths.books}${bookId == null ? RoutePaths.bookInfo : '/$bookId'}";
 }
 
 class RoutePaths {
   static String books = "/books";
-  static String search = "/search";
+  static String bookInfo = "/:bookId";
 }
