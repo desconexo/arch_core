@@ -33,6 +33,12 @@ class AppSettings {
 
   /// Register a new module
   static void register(AppModule module) {
+    if(modules.any((m) => m.name == module.name))
+      throw Exception("You must not register a module more then once");
+    if(module.initialModule)
+      if(modules.any((m) => m.initialModule))
+        throw Exception("Only one initial module is supported");
+
     CoreRouter.register(module);
     modules.add(module);
   }

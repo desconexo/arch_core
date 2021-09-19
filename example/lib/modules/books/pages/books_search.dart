@@ -9,7 +9,7 @@ class BooksSearch extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text("This is the book search's page"),
+            Text("This is the book search page"),
             ElevatedButton(
               onPressed: () => Get.back(),
               child: Text("Tap to travel back"),
