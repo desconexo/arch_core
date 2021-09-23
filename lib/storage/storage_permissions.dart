@@ -1,0 +1,1 @@
+enum StoragePermissions { READ, WRITE, DELETE }
