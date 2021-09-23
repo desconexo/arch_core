@@ -50,7 +50,11 @@ class AppSettings {
     }
   }
 
-  static String get initialRoute => modules.firstWhere((module) => module.initialModule).router.path;
+  static String get initialRoute {
+    if(!modules.any((module) => module.initialModule))
+      throw Exception("No initial module found");
+    return modules.firstWhere((module) => module.initialModule).router.path;
+  }
 
   static List<GetPage> get routes => CoreRouter.routes;
 }
