@@ -11,7 +11,7 @@ void main() {
   // AppSettings.errorHandler = (String s) => print(s);
 
   AppSettings.init(appTitle: "example", apiPath:  "https://www.googleapis.com/", enableLog: true, errorHandler: print);
-  AppSettings.register(BooksModule());
+  AppSettings.register(BooksModule().initial);
 
   runApp(ExampleApp());
 }

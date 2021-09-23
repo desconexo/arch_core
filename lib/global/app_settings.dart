@@ -51,7 +51,7 @@ class AppSettings {
   }
 
   static String get initialRoute {
-    if(modules.any((module) => module.initialModule))
+    if(!modules.any((module) => module.initialModule))
       throw Exception("No initial module found");
     return modules.firstWhere((module) => module.initialModule).router.path;
   }
